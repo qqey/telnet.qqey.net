@@ -30,7 +30,9 @@ Please make sure to update tests as appropriate.
 ## License
 
 The inspiration for this code was derived from the following authors. Thank you.
+
 Author: potproject
+
 Link to the original code: https://github.com/potproject/tel-potproject.net
 
 [MIT](https://choosealicense.com/licenses/mit/)
