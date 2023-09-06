@@ -1,6 +1,6 @@
 # develop command
 
-.PHONY: run
+.PHONY: gorun
 gorun:
 	air -c .air.toml
 
