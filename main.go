@@ -1,33 +1,63 @@
 package main
 
 import (
-	"embed"
-	"html/template"
-	"log"
-	"net/http"
+	"fmt"
+	"net"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
-//go:embed templates/*
-var resources embed.FS
+var counter int = 0
 
-var t = template.Must(template.ParseFS(resources, "templates/*"))
+func handleConnection(conn net.Conn) {
+	defer conn.Close()
+	counter++
+
+	var welcomeMessage = fmt.Sprintf(`
+You must use UTF-8 Encoding to view this page!!
+
+Welcome to the telnet.qqey.net!
+
+You are the %d th access human!
+Your IP Address is %s 
+
+Web: https://qqey.net
+GitHub Organization: https://github.com/qqey
+
+`, counter, conn.RemoteAddr())
+
+	conn.Write([]byte(welcomeMessage))
+}
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-
+	listener, err := net.Listen("tcp", "localhost:23")
+	if err != nil {
+		fmt.Println("Error listening:", err)
+		os.Exit(1)
 	}
+	defer listener.Close()
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		data := map[string]string{
-			"Region": os.Getenv("FLY_REGION"),
+	fmt.Println("TCP server is listening on port 23")
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		<-sigChan
+		fmt.Println("Shutting down the server...")
+		listener.Close()
+		os.Exit(0)
+	}()
+
+	for {
+		conn, err := listener.Accept()
+
+		fmt.Println(conn.RemoteAddr())
+		if err != nil {
+			fmt.Println("Error accepting connection:", err)
+			continue
 		}
-
-		t.ExecuteTemplate(w, "index.html.tmpl", data)
-	})
-
-	log.Println("listening on", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+		go handleConnection(conn)
+	}
 }
