@@ -31,7 +31,7 @@ GitHub Organization: https://github.com/qqey
 }
 
 func main() {
-	listener, err := net.Listen("tcp", "localhost:23")
+	listener, err := net.Listen("tcp", ":23")
 	if err != nil {
 		fmt.Println("Error listening:", err)
 		os.Exit(1)
