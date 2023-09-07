@@ -7,7 +7,7 @@
 In this project, it is recommended to use "air," which allows for hot reloading in Golang.
 
 ```sh
-make gorun
+air
 # or
 go run main.go
 ```
