@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for cold-wind-8148 on 2023-09-06T17:01:34+09:00
+# fly.toml app configuration file generated for lingering-fire-5727 on 2023-12-29T21:19:06+09:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "cold-wind-8148"
+app = "lingering-fire-5727"
 primary_region = "nrt"
 
 [build]
